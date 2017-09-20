@@ -179,9 +179,14 @@ public class User {
     @JoinColumn(name = "originId")
     //定义为懒加载，默认加载User信息的时候，并不查询这个集合
     @LazyCollection(LazyCollectionOption.EXTRA)
-
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<UserFollow> following = new HashSet<>();
+
+    //所创建的群
+    @JoinColumn(name = "ownerId")
+    @LazyCollection(LazyCollectionOption.EXTRA)//懒加载集合的方式，尽可能的不加载具体的数据，当访问groups.size()仅仅查询数量，遍历才加载
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Group> groups = new HashSet<>();
 
     //关注我的人的列表
     //对应的数据库表字段为TB_USER_FOLLOW.targetId
@@ -191,5 +196,11 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<UserFollow> followers = new HashSet<>();
 
+    public Set<Group> getGroups() {
+        return groups;
+    }
 
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
+    }
 }
